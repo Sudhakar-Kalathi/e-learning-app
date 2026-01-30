@@ -1,0 +1,17 @@
+# Java
+target/
+*.log
+*.class
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Node (if React later)
+node_modules/
+
+# Env
+.env
