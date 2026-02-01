@@ -3,6 +3,11 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f6f8;
     color: #333;
+
+    /* Footer fix */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Navbar */
@@ -38,6 +43,7 @@ body {
     padding: 60px 20px;
     background-color: #34495e;
     color: white;
+    flex: 1;
 }
 
 .hero button {
@@ -52,6 +58,7 @@ body {
 /* Courses */
 .courses {
     padding: 40px 20px;
+    flex: 1;
 }
 
 .course-list {
@@ -113,6 +120,7 @@ body {
     padding: 40px 20px;
     max-width: 800px;
     margin: auto;
+    flex: 1;
 }
 
 .course-points {
@@ -191,6 +199,8 @@ body {
     color: white;
     font-size: 14px;
 }
-.footer p {
-    margin: 0;
+/* Active navbar link */
+.nav-links a.active {
+    border-bottom: 2px solid #f39c12;
+    padding-bottom: 4px;
 }
