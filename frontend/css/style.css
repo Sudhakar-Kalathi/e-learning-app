@@ -91,3 +91,19 @@ body {
     font-size: 14px;
     color: #555;
 }
+
+/* Button link styling */
+.hero a {
+    text-decoration: none;   /* removes underline */
+    color: white;
+}
+
+/* Optional: make it feel more clickable */
+.hero a:hover {
+    opacity: 0.9;
+}
+
+.hero button {
+    border-radius: 6px;
+    font-weight: bold;
+}
