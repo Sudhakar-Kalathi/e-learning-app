@@ -67,3 +67,27 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
+
+/* Improve course layout */
+.course-list {
+    flex-wrap: wrap;
+}
+
+.course-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+/* Center text in cards */
+.course-card h3 {
+    margin-top: 0;
+}
+
+.course-card p {
+    font-size: 14px;
+    color: #555;
+}
