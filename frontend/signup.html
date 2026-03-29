@@ -3,41 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign Up | Ease Everything</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <nav class="navbar">
-        <h2 class="logo">Ease Everything</h2>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="courses.html">Courses</a></li>
-            <li><a href="login.html" class="active">Login</a></li>
-        </ul>
-    </nav>
+<nav class="navbar">
+    <div class="logo">Ease Everything</div>
+</nav>
 
-    <section class="course-detail">
-        <div class="container">
+<div class="auth-page">
+    <div class="auth-card">
         <h2>Create Account</h2>
-
-        <form class="login-form">
-            <input type="text" placeholder="Full Name" required>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" required>
-            <input type="password" placeholder="Confirm Password" required>
+        <form id="signupForm">
+            <input type="text" id="signupName" placeholder="Full Name" required>
+            <input type="email" id="signupEmail" placeholder="Email" required>
+            <select id="signupRole" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+                <option value="STUDENT">Student</option>
+                <option value="INSTRUCTOR">Instructor</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+            <input type="password" id="signupPassword" placeholder="Password" required>
             <button type="submit">Sign Up</button>
         </form>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+    </div>
+</div>
 
-        <p class="form-link">
-            Already have an account?
-            <a href="login.html">Login</a>
-        </p>
-        </div>
-    </section>
+<script>
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const role = document.getElementById('signupRole').value;
 
-    <footer class="footer">
-        <p>© 2026 Ease Everything. Learn coding the easy way.</p>
-    </footer>
+        try {
+            await apiFetch('/auth/register', {
+                method: 'POST',
+                body: { name, email, password, role }
+            });
+            alert('Signup successful! Please login.');
+            window.location.href = 'login.html';
+        } catch (error) {
+            alert(error.message || 'Signup failed');
+        }
+    });
+</script>
 
+<script src="js/main.js"></script>
 </body>
 </html>

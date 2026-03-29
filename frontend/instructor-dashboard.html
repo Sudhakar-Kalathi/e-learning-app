@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructor Dashboard | Ease Everything</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
+        .row { display: flex; gap: 40px; }
+        .col { flex: 1; }
+        .form-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .form-card h3 { margin-top: 0; }
+        .form-card input, .form-card textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
+        .form-card button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .course-list { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .course-item { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .course-item h4 { margin: 0 0 10px; color: #007bff; }
+        .action-btns { margin-top: 10px; display: flex; gap: 10px; }
+        .btn-small { padding: 5px 10px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">Ease Everything</div>
+    <div class="menu-toggle">☰</div>
+    <ul class="nav-links">
+        <!-- Injected via JS -->
+    </ul>
+</nav>
+
+<div class="dashboard-container">
+    <h2>Instructor Dashboard</h2>
+    <p>Welcome, <span id="instructorName"></span>. Here you can manage your courses and content.</p>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-card">
+                <h3>Create New Course</h3>
+                <form id="createCourseForm">
+                    <input type="text" id="courseTitle" placeholder="Course Title" required>
+                    <textarea id="courseDesc" placeholder="Course Description" required rows="4"></textarea>
+                    <button type="submit">Publish Course</button>
+                </form>
+            </div>
+            
+            <div class="form-card" id="lessonFormCard" style="display:none; border-top: 4px solid #17a2b8;">
+                <h3 id="lessonTargetTitle">Add Lesson</h3>
+                <form id="addLessonForm">
+                    <input type="hidden" id="lessonCourseId">
+                    <input type="text" id="lessonTitle" placeholder="Lesson Title" required>
+                    <input type="text" id="lessonUrl" placeholder="Video/Content URL" required>
+                    <button type="submit" style="background:#17a2b8;">Save Lesson</button>
+                </form>
+            </div>
+
+            <div class="form-card" id="assignmentFormCard" style="display:none; border-top: 4px solid #ffc107;">
+                <h3 id="assignmentTargetTitle">Add Assignment</h3>
+                <form id="addAssignmentForm">
+                    <input type="hidden" id="assignmentCourseId">
+                    <input type="text" id="assignmentTitle" placeholder="Assignment Title" required>
+                    <textarea id="assignmentDesc" placeholder="Description Instructions..." required rows="3"></textarea>
+                    <button type="submit" style="background:#ffc107; color:#333;">Save Assignment</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="course-list">
+                <h3>Your Published Courses</h3>
+                <div id="courseListContainer">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const role = localStorage.getItem("userRole");
+        if (role !== "INSTRUCTOR") {
+            window.location.href = "login.html";
+            return;
+        }
+
+        document.getElementById('instructorName').textContent = localStorage.getItem('userName');
+        await loadCourses();
+    });
+
+    async function loadCourses() {
+        try {
+            const courses = await apiFetch('/instructor/courses');
+            const container = document.getElementById('courseListContainer');
+            
+            if(courses.length === 0) {
+                container.innerHTML = '<p>No courses published yet. Start creating!</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            courses.forEach(course => {
+                const desc = course.description.length > 60 ? course.description.substring(0, 60) + '...' : course.description;
+                container.innerHTML += `
+                    <div class="course-item">
+                        <h4>${course.title}</h4>
+                        <p style="font-size:14px; color:#555;">${desc}</p>
+                        <div class="action-btns">
+                            <button class="btn-small" onclick="showLessonForm(${course.id}, '${course.title.replace(/'/g, "\\'")}')">+ Lesson</button>
+                            <button class="btn-small" style="background:#ffc107; color:#333;" onclick="showAssignmentForm(${course.id}, '${course.title.replace(/'/g, "\\'")}')">+ Assignment</button>
+                            <button class="btn-small" style="background:#6c757d;" onclick="alert('Viewing submissions for course...')">Submissions</button>
+                        </div>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    document.getElementById('createCourseForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('courseTitle').value;
+        const description = document.getElementById('courseDesc').value;
+
+        try {
+            await apiFetch('/instructor/courses', {
+                method: 'POST',
+                body: { title, description }
+            });
+            alert('Course published successfully!');
+            document.getElementById('createCourseForm').reset();
+            loadCourses();
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+
+    function showLessonForm(courseId, title) {
+        document.getElementById('lessonFormCard').style.display = 'block';
+        document.getElementById('assignmentFormCard').style.display = 'none';
+        document.getElementById('lessonTargetTitle').textContent = 'Add Lesson to: ' + title;
+        document.getElementById('lessonCourseId').value = courseId;
+    }
+
+    function showAssignmentForm(courseId, title) {
+        document.getElementById('assignmentFormCard').style.display = 'block';
+        document.getElementById('lessonFormCard').style.display = 'none';
+        document.getElementById('assignmentTargetTitle').textContent = 'Add Assignment to: ' + title;
+        document.getElementById('assignmentCourseId').value = courseId;
+    }
+
+    document.getElementById('addLessonForm').addEventListener('submit', async(e) => {
+        e.preventDefault();
+        const cid = document.getElementById('lessonCourseId').value;
+        const title = document.getElementById('lessonTitle').value;
+        const url = document.getElementById('lessonUrl').value;
+        try {
+            await apiFetch(`/instructor/courses/${cid}/lessons`, {
+                method: 'POST', body: { title, contentUrl: url }
+            });
+            alert('Lesson added!');
+            document.getElementById('addLessonForm').reset();
+            document.getElementById('lessonFormCard').style.display = 'none';
+        } catch(e) { alert(e.message); }
+    });
+
+    document.getElementById('addAssignmentForm').addEventListener('submit', async(e) => {
+        e.preventDefault();
+        const cid = document.getElementById('assignmentCourseId').value;
+        const title = document.getElementById('assignmentTitle').value;
+        const desc = document.getElementById('assignmentDesc').value;
+        try {
+            await apiFetch(`/instructor/courses/${cid}/assignments`, {
+                method: 'POST', body: { title, description: desc }
+            });
+            alert('Assignment added!');
+            document.getElementById('addAssignmentForm').reset();
+            document.getElementById('assignmentFormCard').style.display = 'none';
+        } catch(e) { alert(e.message); }
+    });
+</script>
+</body>
+</html>

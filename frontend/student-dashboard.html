@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard | Ease Everything</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .dashboard-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
+        .welcome-sec { margin-bottom: 30px; }
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .course-card { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; display: flex; flex-direction: column;}
+        .course-card h3 { margin-top: 0; color: #333; }
+        .course-card p { font-size: 14px; color: #666; flex-grow: 1; }
+        .progress-bar-container { background: #e9ecef; border-radius: 8px; height: 10px; overflow: hidden; margin: 15px 0; }
+        .progress-bar { background: #28a745; height: 100%; width: 0%; transition: width 0.3s ease; }
+        .btn-action { text-align: center; background: #007bff; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; display: inline-block; text-decoration: none;}
+        
+        .tabs { margin-top: 40px; display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px;}
+        .tab { padding: 10px 20px; cursor: pointer; color: #666; }
+        .tab.active { color: #007bff; border-bottom: 2px solid #007bff; font-weight: bold; margin-bottom: -2px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">Ease Everything</div>
+    <div class="menu-toggle">☰</div>
+    <ul class="nav-links">
+        <!-- Injected via JS -->
+    </ul>
+</nav>
+
+<div class="dashboard-container">
+    <div class="welcome-sec">
+        <h2>Student Dashboard</h2>
+        <p>Welcome back, <span id="studentName"></span>!</p>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('enrolled')">My Enrolled Courses</div>
+        <div class="tab" onclick="switchTab('available')">Available Courses</div>
+    </div>
+
+    <div id="enrolledCoursesView" class="course-grid">
+        <p>Loading enrolled courses...</p>
+    </div>
+
+    <div id="availableCoursesView" class="course-grid" style="display: none;">
+        <p>Loading available courses...</p>
+    </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const role = localStorage.getItem("userRole");
+        if (role !== "STUDENT") {
+            window.location.href = "login.html";
+            return;
+        }
+
+        document.getElementById('studentName').textContent = localStorage.getItem('userName');
+        await loadEnrolledCourses();
+        await loadAvailableCourses();
+    });
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        if(tab === 'enrolled') {
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.getElementById('enrolledCoursesView').style.display = 'grid';
+            document.getElementById('availableCoursesView').style.display = 'none';
+        } else {
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            document.getElementById('enrolledCoursesView').style.display = 'none';
+            document.getElementById('availableCoursesView').style.display = 'grid';
+        }
+    }
+
+    async function loadEnrolledCourses() {
+        try {
+            const enrollments = await apiFetch('/student/enrollments');
+            const container = document.getElementById('enrolledCoursesView');
+            if(enrollments.length === 0) {
+                container.innerHTML = '<p>You are not enrolled in any courses yet. Browse Available Courses!</p>';
+                container.style.display = 'block';
+                return;
+            }
+            container.innerHTML = '';
+            
+            enrollments.forEach(enr => {
+                const c = enr.course;
+                container.innerHTML += `
+                    <div class="course-card">
+                        <h3>${c.title}</h3>
+                        <p>${c.description}</p>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: ${enr.progressPercentage}%"></div>
+                        </div>
+                        <small style="display:block;margin-bottom:10px;">Progress: ${enr.progressPercentage}%</small>
+                        <button class="btn-action" onclick="alert('View course features available soon!')">Continue Learning</button>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function loadAvailableCourses() {
+        try {
+            const courses = await apiFetch('/student/courses');
+            const container = document.getElementById('availableCoursesView');
+            if(courses.length === 0) {
+                container.innerHTML = '<p>No courses available right now.</p>';
+                container.style.display = 'block';
+                return;
+            }
+            container.innerHTML = '';
+
+            courses.forEach(c => {
+                container.innerHTML += `
+                    <div class="course-card">
+                        <h3>${c.title}</h3>
+                        <p>${c.description}</p>
+                        <button class="btn-action" style="background:#28a745;" onclick="enrollCourse(${c.id})">Enroll Now</button>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function enrollCourse(courseId) {
+        try {
+            await apiFetch(`/student/courses/${courseId}/enroll`, { method: 'POST' });
+            alert("Enrolled successfully!");
+            window.location.reload();
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+</script>
+</body>
+</html>
