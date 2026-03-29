@@ -6,51 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="bg-main">
 
 <nav class="navbar">
-    <div class="logo">Ease Everything</div>
+    <a href="index.html" class="logo">Ease Everything</a>
 </nav>
 
 <div class="auth-page">
-    <div class="auth-card">
-        <h2>Create Account</h2>
+    <div class="auth-card glass">
+        <h2 style="margin-bottom: 0.5rem;">Create Your Account</h2>
+        <p style="color:var(--text-muted); margin-bottom: 2rem;">Start your professional learning pathway today.</p>
         <form id="signupForm">
-            <input type="text" id="signupName" placeholder="Full Name" required>
-            <input type="email" id="signupEmail" placeholder="Email" required>
-            <select id="signupRole" required style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
-                <option value="STUDENT">Student</option>
-                <option value="INSTRUCTOR">Instructor</option>
-                <option value="ADMIN">Admin</option>
+            <input type="text" id="signupName" placeholder="Full Name (e.g. Sudhakar Kalathi)" required>
+            <input type="email" id="signupEmail" placeholder="Email Address" required>
+            <select id="signupRole" required style="width: 100%; padding: 10.5px 1rem; margin-bottom: 1rem; border-radius: 0.75rem; border:1px solid #E2E8F0; background:white; font-size: 1rem;">
+                <option value="STUDENT">I want to Learn (Student)</option>
+                <option value="INSTRUCTOR">I want to Teach (Instructor)</option>
+                <option value="ADMIN">Platform Administrator</option>
             </select>
-            <input type="password" id="signupPassword" placeholder="Password" required>
-            <button type="submit">Sign Up</button>
+            <input type="password" id="signupPassword" placeholder="Create Password" required>
+            <button type="submit">Complete Registration</button>
         </form>
-        <p>Already have an account? <a href="login.html">Login</a></p>
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+            Already registered? <a href="login.html" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign In Here</a>
+        </p>
     </div>
 </div>
 
+<footer class="footer">
+    <p>Ease Everything &copy; 2026</p>
+    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+</footer>
+
+<script src="js/main.js"></script>
 <script>
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('signupName').value;
-        const email = document.getElementById('signupEmail').value;
-        const password = document.getElementById('signupPassword').value;
-        const role = document.getElementById('signupRole').value;
-
+        const body = {
+            name: document.getElementById('signupName').value,
+            email: document.getElementById('signupEmail').value,
+            password: document.getElementById('signupPassword').value,
+            role: document.getElementById('signupRole').value
+        };
         try {
-            await apiFetch('/auth/register', {
-                method: 'POST',
-                body: { name, email, password, role }
-            });
-            alert('Signup successful! Please login.');
+            await apiFetch('/auth/register', { method: 'POST', body: body });
+            alert('Signup successful! Please proceed to login.');
             window.location.href = 'login.html';
-        } catch (error) {
-            alert(error.message || 'Signup failed');
-        }
+        } catch (error) { alert(error.message || 'Signup failed'); }
     });
 </script>
-
-<script src="js/main.js"></script>
 </body>
 </html>

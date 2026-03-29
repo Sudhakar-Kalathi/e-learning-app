@@ -2,59 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ease Everything | Learn Coding</title>
+    <title>Ease Everything | The Future of Learning</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <nav class="navbar">
-    <div class="logo">Ease Everything</div>
+    <a href="index.html" class="logo">Ease Everything</a>
     <div class="menu-toggle">☰</div>
-    <ul class="nav-links">
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="courses.html">Courses</a></li>
-        <li><a href="login.html">Login</a></li>
+    <ul class="nav-links" id="mainNav">
+        <!-- Injected via JS -->
     </ul>
 </nav>
 
 <header class="hero">
-    <h1>Learn Coding the Easy Way</h1>
-    <p>Structured paths, real examples, self-paced learning</p>
-    <a href="courses.html"><button>Start Learning 🚀</button></a>
+    <h1>Transform Your Future <br /><span style="color:var(--primary);">Learn Anything.</span></h1>
+    <p>Empowering 20,000+ students with industry-expert curriculums and personalized learning paths.</p>
+    <div>
+        <a href="signup.html"><button>Join the Journey 🚀</button></a>
+        <a href="courses.html" style="margin-left:1.5rem; text-decoration:none; font-weight:700; color:var(--text-main);">Browse Catalog</a>
+    </div>
 </header>
 
-<section>
-    <div class="container">
-        <h2>Learning Paths</h2>
-        <p class="section-sub">Choose a guided journey</p>
+<section class="container">
+    <h2 style="text-align:center; margin-bottom:0.5rem;">The Ease Everything Advantage</h2>
+    <p class="section-sub" style="text-align:center;">Why top performers choose our platform.</p>
 
-        <div class="path-grid">
-            <div class="path-card">☕ Java Developer</div>
-            <div class="path-card">🎨 Frontend Developer</div>
-            <div class="path-card">🧠 DSA Path</div>
+    <div class="stats-grid" style="margin-top:3rem;">
+        <div class="stat-card glass shadow-sm">
+            <h3 style="color:var(--primary);">01. Personalized Tracking</h3>
+            <p style="margin-top:1rem; color:var(--text-muted); font-size:0.9rem;">Real-time progress visualization across all your curriculums.</p>
+        </div>
+        <div class="stat-card glass shadow-sm">
+            <h3 style="color:var(--primary);">02. Expert Instructors</h3>
+            <p style="margin-top:1rem; color:var(--text-muted); font-size:0.9rem;">Direct access to lessons curated by industry-leading professionals.</p>
+        </div>
+        <div class="stat-card glass shadow-sm">
+            <h3 style="color:var(--primary);">03. Global Community</h3>
+            <p style="margin-top:1rem; color:var(--text-muted); font-size:0.9rem;">Join a worldwide network of learners and share your achievements.</p>
         </div>
     </div>
 </section>
 
-<section>
-    <div class="container">
-        <h2>Popular Courses</h2>
+<footer class="footer">
+    <p>Ease Everything Learning Ecosystem &copy; 2026</p>
+    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+</footer>
 
-        <div class="course-grid">
-            <a href="course-detail.html" class="course-card">
-                ☕ Java Basics
-                <p>Strong Java foundation</p>
-            </a>
-
-            <div class="course-card">🧮 Data Structures</div>
-            <div class="course-card">🌐 Web Development</div>
-            <div class="course-card">🚀 Spring Boot</div>
-        </div>
-    </div>
-</section>
-
-<footer class="footer">© 2026 Ease Everything</footer>
 <script src="js/main.js"></script>
 </body>
 </html>

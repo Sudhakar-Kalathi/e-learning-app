@@ -2,91 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Instructor Dashboard | Ease Everything</title>
+    <title>Instructor Studio | Ease Everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .dashboard-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
-        .row { display: flex; gap: 40px; }
-        .col { flex: 1; }
-        .form-card { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .form-card h3 { margin-top: 0; }
-        .form-card input, .form-card textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; }
-        .form-card button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .course-list { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .course-item { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .course-item h4 { margin: 0 0 10px; color: #007bff; }
-        .action-btns { margin-top: 10px; display: flex; gap: 10px; }
-        .btn-small { padding: 5px 10px; background: #17a2b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .studio-top-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 2rem; margin-bottom: 3rem; }
+        .course-studio-card { padding: 2rem; border-radius: var(--radius); }
+        .studio-empty { text-align: center; padding: 4rem 2rem; border: 2px dashed #E2E8F0; border-radius: var(--radius); }
     </style>
 </head>
-<body>
+<body class="bg-main">
 
 <nav class="navbar">
-    <div class="logo">Ease Everything</div>
+    <a href="index.html" class="logo">Ease Everything</a>
     <div class="menu-toggle">☰</div>
-    <ul class="nav-links">
+    <ul class="nav-links" id="mainNav">
         <!-- Injected via JS -->
     </ul>
 </nav>
 
-<div class="dashboard-container">
-    <h2>Instructor Dashboard</h2>
-    <p>Welcome, <span id="instructorName"></span>. Here you can manage your courses and content.</p>
+<div class="container">
+    <header class="dashboard-header">
+        <div>
+            <h1>Instructor Studio</h1>
+            <p class="section-sub">Manage your content curriculum and track performance.</p>
+        </div>
+        <div>
+            <button onclick="document.getElementById('studioPublishModal').style.display='flex'" style="background:var(--primary); color:white; border:none; padding: 0.75rem 1.5rem; border-radius: var(--radius); font-weight:600; cursor:pointer;">+ Create New Course</button>
+        </div>
+    </header>
 
-    <div class="row">
-        <div class="col">
-            <div class="form-card">
-                <h3>Create New Course</h3>
-                <form id="createCourseForm">
-                    <input type="text" id="courseTitle" placeholder="Course Title" required>
-                    <textarea id="courseDesc" placeholder="Course Description" required rows="4"></textarea>
-                    <button type="submit">Publish Course</button>
-                </form>
-            </div>
-            
-            <div class="form-card" id="lessonFormCard" style="display:none; border-top: 4px solid #17a2b8;">
-                <h3 id="lessonTargetTitle">Add Lesson</h3>
-                <form id="addLessonForm">
-                    <input type="hidden" id="lessonCourseId">
-                    <input type="text" id="lessonTitle" placeholder="Lesson Title" required>
-                    <input type="text" id="lessonUrl" placeholder="Video/Content URL" required>
-                    <button type="submit" style="background:#17a2b8;">Save Lesson</button>
-                </form>
-            </div>
-
-            <div class="form-card" id="assignmentFormCard" style="display:none; border-top: 4px solid #ffc107;">
-                <h3 id="assignmentTargetTitle">Add Assignment</h3>
-                <form id="addAssignmentForm">
-                    <input type="hidden" id="assignmentCourseId">
-                    <input type="text" id="assignmentTitle" placeholder="Assignment Title" required>
-                    <textarea id="assignmentDesc" placeholder="Description Instructions..." required rows="3"></textarea>
-                    <button type="submit" style="background:#ffc107; color:#333;">Save Assignment</button>
-                </form>
+    <div class="studio-top-grid">
+        <div class="glass" style="padding: 2rem; border-radius: var(--radius);">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.5rem;">Your Curriculum Catalog</h2>
+            <div id="courseListContainer">
+                <p style="color:var(--text-muted);">Synchronizing Studio...</p>
             </div>
         </div>
 
-        <div class="col">
-            <div class="course-list">
-                <h3>Your Published Courses</h3>
-                <div id="courseListContainer">
-                    <p>Loading...</p>
+        <div class="glass" style="padding: 2rem; border-radius: var(--radius); height: fit-content;">
+            <h2 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Quick Editor</h2>
+            <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem;">Select a course to add materials or assignments.</p>
+            
+            <div id="studioEditorArea" class="studio-empty">
+                <p>No Active Course Selection</p>
+                <small>Select a course to start adding content</small>
+            </div>
+
+            <div id="studioEditorForms" style="display:none;">
+                <div style="background:#F8FAFC; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                    <h4 id="editorTitle" style="margin-bottom: 1rem;">Course Material</h4>
+                    <form id="addLessonForm">
+                        <input type="hidden" id="lessonCourseId">
+                        <input type="text" id="lessonTitle" placeholder="Lesson Name (e.g. Introduction)" required>
+                        <input type="text" id="lessonUrl" placeholder="Content Link or URL" required>
+                        <button type="submit" style="width:100%; padding:0.6rem; background:var(--primary); color: white; border:none; border-radius:8px; cursor:pointer;">Add Material</button>
+                    </form>
+                </div>
+                <div style="background:#F8FAFC; padding: 1.5rem; border-radius: 12px;">
+                    <h4 style="margin-bottom: 1rem;">Draft Assignment</h4>
+                    <form id="addAssignmentForm">
+                        <input type="hidden" id="assignmentCourseId">
+                        <input type="text" id="assignmentTitle" placeholder="Task Title" required>
+                        <textarea id="assignmentDesc" placeholder="Briefly describe the student mission..." required rows="3"></textarea>
+                        <button type="submit" style="width:100%; padding:0.6rem; background:var(--secondary); color: white; border:none; border-radius:8px; cursor:pointer;">Add Assignment</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div id="studioPublishModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100; align-items:center; justify-content:center; backdrop-filter:blur(5px);">
+    <div class="glass" style="width: 100%; max-width: 500px; padding: 3rem; border-radius: 24px; position:relative;">
+        <button onclick="this.parentElement.parentElement.style.display='none'" style="position:absolute; top:1.5rem; right:1.5rem; border:none; background:none; font-size:1.5rem; cursor:pointer;">&times;</button>
+        <h2 style="margin-bottom: 2rem; text-align: center;">Draft New Curriculum</h2>
+        <form id="createCourseForm">
+            <input type="text" id="courseTitle" placeholder="High-impact Course Title" required style="width:100%; padding:1rem; border:1px solid #E2E8F0; border-radius:12px; margin-bottom:1rem;">
+            <textarea id="courseDesc" placeholder="Course narrative - why should students enroll?" required rows="5" style="width:100%; padding:1rem; border:1px solid #E2E8F0; border-radius:12px; margin-bottom:1rem;"></textarea>
+            <button type="submit" style="width:100%; padding:1rem; background:var(--primary); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer;">Publish Globally</button>
+        </form>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>Ease Everything Studio &copy; 2026</p>
+    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+</footer>
+
 <script src="js/main.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         const role = localStorage.getItem("userRole");
-        if (role !== "INSTRUCTOR") {
-            window.location.href = "login.html";
-            return;
-        }
-
-        document.getElementById('instructorName').textContent = localStorage.getItem('userName');
+        if (role !== "INSTRUCTOR") { window.location.href = "login.html"; return; }
         await loadCourses();
     });
 
@@ -94,91 +102,66 @@
         try {
             const courses = await apiFetch('/instructor/courses');
             const container = document.getElementById('courseListContainer');
-            
             if(courses.length === 0) {
-                container.innerHTML = '<p>No courses published yet. Start creating!</p>';
+                container.innerHTML = '<div class="studio-empty"><p>Catalog is currently empty.</p><small>Publish your first course to begin teaching.</small></div>';
                 return;
             }
-
             container.innerHTML = '';
             courses.forEach(course => {
-                const desc = course.description.length > 60 ? course.description.substring(0, 60) + '...' : course.description;
                 container.innerHTML += `
-                    <div class="course-item">
-                        <h4>${course.title}</h4>
-                        <p style="font-size:14px; color:#555;">${desc}</p>
-                        <div class="action-btns">
-                            <button class="btn-small" onclick="showLessonForm(${course.id}, '${course.title.replace(/'/g, "\\'")}')">+ Lesson</button>
-                            <button class="btn-small" style="background:#ffc107; color:#333;" onclick="showAssignmentForm(${course.id}, '${course.title.replace(/'/g, "\\'")}')">+ Assignment</button>
-                            <button class="btn-small" style="background:#6c757d;" onclick="alert('Viewing submissions for course...')">Submissions</button>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:1.25rem; border-bottom:1px solid #F1F5F9;">
+                        <div>
+                            <h4 style="font-weight:700; color:var(--text-main); margin-bottom:0.25rem;">${course.title}</h4>
+                            <p style="font-size:0.875rem; color:var(--text-muted);">${course.description.substring(0, 80)}...</p>
                         </div>
+                        <button onclick="populateEditor(${course.id}, '${course.title.replace(/'/g, "\\'")}')" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer; font-size:0.875rem;">Edit Studio</button>
                     </div>
                 `;
             });
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
+    }
+
+    function populateEditor(courseId, title) {
+        document.getElementById('studioEditorArea').style.display = 'none';
+        document.getElementById('studioEditorForms').style.display = 'block';
+        document.getElementById('editorTitle').textContent = 'Curriculum: ' + title;
+        document.getElementById('lessonCourseId').value = courseId;
+        document.getElementById('assignmentCourseId').value = courseId;
     }
 
     document.getElementById('createCourseForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('courseTitle').value;
-        const description = document.getElementById('courseDesc').value;
-
         try {
             await apiFetch('/instructor/courses', {
                 method: 'POST',
-                body: { title, description }
+                body: { title: document.getElementById('courseTitle').value, description: document.getElementById('courseDesc').value }
             });
-            alert('Course published successfully!');
-            document.getElementById('createCourseForm').reset();
-            loadCourses();
-        } catch (error) {
-            alert(error.message);
-        }
+            alert('Curriculum Published');
+            window.location.reload();
+        } catch (error) { alert(error.message); }
     });
-
-    function showLessonForm(courseId, title) {
-        document.getElementById('lessonFormCard').style.display = 'block';
-        document.getElementById('assignmentFormCard').style.display = 'none';
-        document.getElementById('lessonTargetTitle').textContent = 'Add Lesson to: ' + title;
-        document.getElementById('lessonCourseId').value = courseId;
-    }
-
-    function showAssignmentForm(courseId, title) {
-        document.getElementById('assignmentFormCard').style.display = 'block';
-        document.getElementById('lessonFormCard').style.display = 'none';
-        document.getElementById('assignmentTargetTitle').textContent = 'Add Assignment to: ' + title;
-        document.getElementById('assignmentCourseId').value = courseId;
-    }
 
     document.getElementById('addLessonForm').addEventListener('submit', async(e) => {
         e.preventDefault();
         const cid = document.getElementById('lessonCourseId').value;
-        const title = document.getElementById('lessonTitle').value;
-        const url = document.getElementById('lessonUrl').value;
         try {
             await apiFetch(`/instructor/courses/${cid}/lessons`, {
-                method: 'POST', body: { title, contentUrl: url }
+                method: 'POST', body: { title: document.getElementById('lessonTitle').value, contentUrl: document.getElementById('lessonUrl').value }
             });
-            alert('Lesson added!');
+            alert('Material added!');
             document.getElementById('addLessonForm').reset();
-            document.getElementById('lessonFormCard').style.display = 'none';
         } catch(e) { alert(e.message); }
     });
 
     document.getElementById('addAssignmentForm').addEventListener('submit', async(e) => {
         e.preventDefault();
         const cid = document.getElementById('assignmentCourseId').value;
-        const title = document.getElementById('assignmentTitle').value;
-        const desc = document.getElementById('assignmentDesc').value;
         try {
             await apiFetch(`/instructor/courses/${cid}/assignments`, {
-                method: 'POST', body: { title, description: desc }
+                method: 'POST', body: { title: document.getElementById('assignmentTitle').value, description: document.getElementById('assignmentDesc').value }
             });
-            alert('Assignment added!');
+            alert('Assignment Created!');
             document.getElementById('addAssignmentForm').reset();
-            document.getElementById('assignmentFormCard').style.display = 'none';
         } catch(e) { alert(e.message); }
     });
 </script>

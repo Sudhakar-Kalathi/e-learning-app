@@ -6,52 +6,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="bg-main">
 
 <nav class="navbar">
-    <div class="logo">Ease Everything</div>
+    <a href="index.html" class="logo">Ease Everything</a>
 </nav>
 
 <div class="auth-page">
-    <div class="auth-card">
-        <h2>Login</h2>
+    <div class="auth-card glass">
+        <h2 style="margin-bottom: 0.5rem;">Welcome Back</h2>
+        <p style="color:var(--text-muted); margin-bottom: 2rem;">Log in to continue your learning journey.</p>
         <form id="loginForm">
-            <input type="email" id="loginEmail" placeholder="Email">
-            <input type="password" id="loginPassword" placeholder="Password">
-            <button type="submit">Login</button>
+            <input type="email" id="loginEmail" placeholder="Email (e.g. admin@example.com)" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">Sign In</button>
         </form>
-        <p>Don’t have an account? <a href="signup.html">Sign up</a></p>
+        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
+            New to the platform? <a href="signup.html" style="color: var(--primary); font-weight: 700; text-decoration: none;">Create an Account</a>
+        </p>
     </div>
 </div>
 
+<footer class="footer">
+    <p>Ease Everything &copy; 2026</p>
+    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+</footer>
+
+<script src="js/main.js"></script>
 <script>
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-
         try {
             const response = await apiFetch('/auth/login', {
                 method: 'POST',
                 body: { email, password }
             });
-
             localStorage.setItem('jwtToken', response.token);
             localStorage.setItem('userRole', response.role);
             localStorage.setItem('userName', response.name);
-            
-            alert('Login successful!');
-
             if(response.role === 'ADMIN') window.location.href = 'admin-dashboard.html';
             else if(response.role === 'INSTRUCTOR') window.location.href = 'instructor-dashboard.html';
             else window.location.href = 'student-dashboard.html';
-            
-        } catch (error) {
-            alert(error.message || 'Login failed');
-        }
+        } catch (error) { alert(error.message || 'Login failed'); }
     });
 </script>
-
-<script src="js/main.js"></script>
 </body>
 </html>

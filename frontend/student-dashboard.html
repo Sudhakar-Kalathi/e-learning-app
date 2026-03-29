@@ -2,77 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Dashboard | Ease Everything</title>
+    <title>Learning Pathway | Ease Everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .dashboard-container { padding: 40px 20px; max-width: 1200px; margin: auto; }
-        .welcome-sec { margin-bottom: 30px; }
-        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .course-card { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); padding: 20px; display: flex; flex-direction: column;}
-        .course-card h3 { margin-top: 0; color: #333; }
-        .course-card p { font-size: 14px; color: #666; flex-grow: 1; }
-        .progress-bar-container { background: #e9ecef; border-radius: 8px; height: 10px; overflow: hidden; margin: 15px 0; }
-        .progress-bar { background: #28a745; height: 100%; width: 0%; transition: width 0.3s ease; }
-        .btn-action { text-align: center; background: #007bff; color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; display: inline-block; text-decoration: none;}
-        
-        .tabs { margin-top: 40px; display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px;}
-        .tab { padding: 10px 20px; cursor: pointer; color: #666; }
-        .tab.active { color: #007bff; border-bottom: 2px solid #007bff; font-weight: bold; margin-bottom: -2px; }
+        .learning-tabs { display: flex; gap: 2rem; border-bottom: 2px solid #E2E8F0; margin-bottom: 2.5rem; }
+        .learning-tab { padding: 1rem 0; cursor: pointer; color: var(--text-muted); font-weight: 600; font-size: 1rem; position: relative; }
+        .learning-tab.active { color: var(--primary); }
+        .learning-tab.active::after { content: ""; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: var(--primary); }
+        .course-card { padding: 2rem; border-radius: var(--radius); transition: transform 0.2s, box-shadow 0.2s; }
+        .course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .progress-indicator { height: 8px; background: #E2E8F0; border-radius: 9999px; margin: 1.5rem 0 0.5rem; overflow: hidden; }
+        .progress-inner { height: 100%; background: var(--primary); border-radius: 9999px; transition: width 0.5s ease-out; }
     </style>
 </head>
-<body>
+<body class="bg-main">
 
 <nav class="navbar">
-    <div class="logo">Ease Everything</div>
+    <a href="index.html" class="logo">Ease Everything</a>
     <div class="menu-toggle">☰</div>
-    <ul class="nav-links">
+    <ul class="nav-links" id="mainNav">
         <!-- Injected via JS -->
     </ul>
 </nav>
 
-<div class="dashboard-container">
-    <div class="welcome-sec">
-        <h2>Student Dashboard</h2>
-        <p>Welcome back, <span id="studentName"></span>!</p>
+<div class="container" style="max-width: 1000px;">
+    <header class="dashboard-header">
+        <div>
+            <h1>Learning Pathway</h1>
+            <p class="section-sub">Accelerate your skills, <strong id="studentName">Student</strong>!</p>
+        </div>
+    </header>
+
+    <div class="learning-tabs">
+        <div class="learning-tab active" onclick="switchTab('enrolled', this)">My Enrolled Courses</div>
+        <div class="learning-tab" onclick="switchTab('available', this)">Global Catalog</div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab('enrolled')">My Enrolled Courses</div>
-        <div class="tab" onclick="switchTab('available')">Available Courses</div>
+    <div id="enrolledCoursesView" class="stats-grid">
+        <p style="color:var(--text-muted);">Synchronizing Pathway...</p>
     </div>
 
-    <div id="enrolledCoursesView" class="course-grid">
-        <p>Loading enrolled courses...</p>
-    </div>
-
-    <div id="availableCoursesView" class="course-grid" style="display: none;">
-        <p>Loading available courses...</p>
+    <div id="availableCoursesView" class="stats-grid" style="display: none;">
+        <p style="color:var(--text-muted);">Fetching Global Catalog...</p>
     </div>
 </div>
+
+<footer class="footer">
+    <p>Ease Everything Learning &copy; 2026</p>
+    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+</footer>
 
 <script src="js/main.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         const role = localStorage.getItem("userRole");
-        if (role !== "STUDENT") {
-            window.location.href = "login.html";
-            return;
-        }
-
+        if (role !== "STUDENT") { window.location.href = "login.html"; return; }
         document.getElementById('studentName').textContent = localStorage.getItem('userName');
         await loadEnrolledCourses();
         await loadAvailableCourses();
     });
 
-    function switchTab(tab) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    function switchTab(tab, el) {
+        document.querySelectorAll('.learning-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
         if(tab === 'enrolled') {
-            document.querySelectorAll('.tab')[0].classList.add('active');
             document.getElementById('enrolledCoursesView').style.display = 'grid';
             document.getElementById('availableCoursesView').style.display = 'none';
         } else {
-            document.querySelectorAll('.tab')[1].classList.add('active');
             document.getElementById('enrolledCoursesView').style.display = 'none';
             document.getElementById('availableCoursesView').style.display = 'grid';
         }
@@ -83,29 +80,25 @@
             const enrollments = await apiFetch('/student/enrollments');
             const container = document.getElementById('enrolledCoursesView');
             if(enrollments.length === 0) {
-                container.innerHTML = '<p>You are not enrolled in any courses yet. Browse Available Courses!</p>';
-                container.style.display = 'block';
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem;"><p style="color:var(--text-muted);">Pathway is currently clear.</p><small>Explore the catalog to start your journey.</small></div>';
                 return;
             }
             container.innerHTML = '';
-            
             enrollments.forEach(enr => {
-                const c = enr.course;
                 container.innerHTML += `
-                    <div class="course-card">
-                        <h3>${c.title}</h3>
-                        <p>${c.description}</p>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" style="width: ${enr.progressPercentage}%"></div>
+                    <div class="course-card glass">
+                        <small style="text-transform: uppercase; font-weight: 700; color:var(--primary); font-size: 0.75rem;">Course Enrolled</small>
+                        <h3 style="margin: 0.5rem 0 1rem; font-size: 1.25rem;">${enr.course.title}</h3>
+                        <p style="color:var(--text-muted); font-size: 0.875rem;">${enr.course.description.substring(0, 100)}...</p>
+                        <div class="progress-indicator"><div class="progress-inner" style="width: ${enr.progressPercentage}%"></div></div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
+                            <span style="font-size:0.75rem; font-weight:700;">${enr.progressPercentage}% Complete</span>
+                            <button onclick="window.location.href='course-detail.html?id=${enr.course.id}'" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer; font-size:0.875rem;">Keep Going →</button>
                         </div>
-                        <small style="display:block;margin-bottom:10px;">Progress: ${enr.progressPercentage}%</small>
-                        <button class="btn-action" onclick="alert('View course features available soon!')">Continue Learning</button>
                     </div>
                 `;
             });
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     }
 
     async function loadAvailableCourses() {
@@ -113,34 +106,28 @@
             const courses = await apiFetch('/student/courses');
             const container = document.getElementById('availableCoursesView');
             if(courses.length === 0) {
-                container.innerHTML = '<p>No courses available right now.</p>';
-                container.style.display = 'block';
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem;"><p>No new curriculums found at the moment.</p></div>';
                 return;
             }
             container.innerHTML = '';
-
             courses.forEach(c => {
                 container.innerHTML += `
-                    <div class="course-card">
-                        <h3>${c.title}</h3>
-                        <p>${c.description}</p>
-                        <button class="btn-action" style="background:#28a745;" onclick="enrollCourse(${c.id})">Enroll Now</button>
+                    <div class="course-card glass">
+                        <small style="text-transform: uppercase; font-weight: 700; color:var(--secondary); font-size: 0.75rem;">Curriculum Discovery</small>
+                        <h3 style="margin: 0.5rem 0 1.5rem; font-size: 1.25rem;">${c.title}</h3>
+                        <button onclick="enrollCourse(${c.id})" style="width:100%; padding:0.75rem; background:var(--primary); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer;">Enroll Now</button>
                     </div>
                 `;
             });
-        } catch (error) {
-            console.error(error);
-        }
+        } catch (error) { console.error(error); }
     }
 
     async function enrollCourse(courseId) {
         try {
             await apiFetch(`/student/courses/${courseId}/enroll`, { method: 'POST' });
-            alert("Enrolled successfully!");
+            alert("Enrollment successful! Welcome to the class.");
             window.location.reload();
-        } catch (error) {
-            alert(error.message);
-        }
+        } catch (error) { alert(error.message); }
     }
 </script>
 </body>
