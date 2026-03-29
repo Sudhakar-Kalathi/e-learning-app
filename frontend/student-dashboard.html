@@ -6,51 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .learning-tabs { display: flex; gap: 2rem; border-bottom: 2px solid #E2E8F0; margin-bottom: 2.5rem; }
-        .learning-tab { padding: 1rem 0; cursor: pointer; color: var(--text-muted); font-weight: 600; font-size: 1rem; position: relative; }
-        .learning-tab.active { color: var(--primary); }
-        .learning-tab.active::after { content: ""; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: var(--primary); }
-        .course-card { padding: 2rem; border-radius: var(--radius); transition: transform 0.2s, box-shadow 0.2s; }
-        .course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-        .progress-indicator { height: 8px; background: #E2E8F0; border-radius: 9999px; margin: 1.5rem 0 0.5rem; overflow: hidden; }
-        .progress-inner { height: 100%; background: var(--primary); border-radius: 9999px; transition: width 0.5s ease-out; }
+        .learning-navbar { position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid #F1F5F9; }
+        .container { padding-top: 8rem !important; }
+        .learning-tabs { display: flex; gap: 2.5rem; border-bottom: 2px solid #F1F5F9; margin-bottom: 3.5rem; }
+        .learning-tab { padding: 1.25rem 0; cursor: pointer; color: #94A3B8; font-weight: 700; font-size: 1.125rem; position: relative; }
+        .learning-tab.active { color: var(--primary-blue); }
+        .learning-tab.active::after { content: ""; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--primary-blue); border-radius: 99px; }
+        .course-card { padding: 2.5rem; border-radius: 2rem; transition: transform 0.25s; overflow: hidden; border: 1px solid #F1F5F9; }
+        .course-card:hover { transform: translateY(-6px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .progress-rail { height: 10px; background: #EEF2FF; border-radius: 99px; margin-top: 2rem; overflow: hidden; }
+        .progress-track { height: 100%; background: var(--primary-blue); border-radius: 99px; transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
-<body class="bg-main">
+<body class="theme-student">
 
-<nav class="navbar">
-    <a href="index.html" class="logo">Ease Everything</a>
-    <div class="menu-toggle">☰</div>
-    <ul class="nav-links" id="mainNav">
-        <!-- Injected via JS -->
-    </ul>
+<nav class="learning-navbar">
+    <div style="max-width: 1200px; margin: auto; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2.5rem;">
+        <a href="index.html" class="logo" style="color: var(--primary-blue); font-size: 1.4rem; letter-spacing: -1px; text-decoration: none; font-weight: 800;">Ease Learning</a>
+        <div style="display: flex; gap: 2.5rem; align-items: center;">
+            <a href="courses.html" style="text-decoration: none; font-weight: 700; color: #64748B; font-size: 0.9rem;">Catalog Discovery</a>
+            <a href="#" style="text-decoration: none; font-weight: 700; color: var(--primary-blue); font-size: 0.9rem;">My Personal Pathway</a>
+            <button onclick="logout(); return false;" style="background:none; border:none; color: #F43F5E; font-weight: 700; font-size: 0.9rem; cursor:pointer;">Sign Out</button>
+        </div>
+    </div>
 </nav>
 
-<div class="container" style="max-width: 1000px;">
-    <header class="dashboard-header">
-        <div>
-            <h1>Learning Pathway</h1>
-            <p class="section-sub">Accelerate your skills, <strong id="studentName">Student</strong>!</p>
-        </div>
+<div class="container" style="max-width: 1100px; margin: auto;">
+    <header style="margin-bottom: 4rem;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; color: #1E1B4B; letter-spacing: -1.5px;">Learning Journey</h1>
+        <p style="color: #64748B; font-size: 1.125rem;">Accelerating your skills, <strong id="studentName">Student</strong>. Welcome back!</p>
     </header>
 
     <div class="learning-tabs">
-        <div class="learning-tab active" onclick="switchTab('enrolled', this)">My Enrolled Courses</div>
-        <div class="learning-tab" onclick="switchTab('available', this)">Global Catalog</div>
+        <div class="learning-tab active" onclick="switchTab('enrolled', this)">Active Curriculums</div>
+        <div class="learning-tab" onclick="switchTab('available', this)">Recommended Discovery</div>
     </div>
 
-    <div id="enrolledCoursesView" class="stats-grid">
-        <p style="color:var(--text-muted);">Synchronizing Pathway...</p>
+    <div id="enrolledCoursesView" class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+        <p style="padding: 2rem; color: #94A3B8;">Initializing Learning Pathway...</p>
     </div>
 
-    <div id="availableCoursesView" class="stats-grid" style="display: none;">
-        <p style="color:var(--text-muted);">Fetching Global Catalog...</p>
+    <div id="availableCoursesView" class="stats-grid" style="display: none; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+        <p style="padding: 2rem; color: #94A3B8;">Filtering Global Recommendations...</p>
     </div>
 </div>
 
 <footer class="footer">
     <p>Ease Everything Learning &copy; 2026</p>
-    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+    <p style="margin-top: 0.5rem; font-weight: 800;">Architected & Built by <strong>Sudhakar Kalathi</strong></p>
 </footer>
 
 <script src="js/main.js"></script>
@@ -80,20 +83,25 @@
             const enrollments = await apiFetch('/student/enrollments');
             const container = document.getElementById('enrolledCoursesView');
             if(enrollments.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem;"><p style="color:var(--text-muted);">Pathway is currently clear.</p><small>Explore the catalog to start your journey.</small></div>';
+                container.innerHTML = '<div style="grid-column:1/-1; padding: 4rem; text-align:center; border: 2px dashed #E2E8F0; border-radius: 2rem;"><p style="color:#94A3B8;">Your pathway is clear. Discover a curriculum to begin.</p></div>';
                 return;
             }
             container.innerHTML = '';
             enrollments.forEach(enr => {
                 container.innerHTML += `
                     <div class="course-card glass">
-                        <small style="text-transform: uppercase; font-weight: 700; color:var(--primary); font-size: 0.75rem;">Course Enrolled</small>
-                        <h3 style="margin: 0.5rem 0 1rem; font-size: 1.25rem;">${enr.course.title}</h3>
-                        <p style="color:var(--text-muted); font-size: 0.875rem;">${enr.course.description.substring(0, 100)}...</p>
-                        <div class="progress-indicator"><div class="progress-inner" style="width: ${enr.progressPercentage}%"></div></div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem;">
-                            <span style="font-size:0.75rem; font-weight:700;">${enr.progressPercentage}% Complete</span>
-                            <button onclick="window.location.href='course-detail.html?id=${enr.course.id}'" style="background:none; border:none; color:var(--primary); font-weight:700; cursor:pointer; font-size:0.875rem;">Keep Going →</button>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                            <span style="font-size:0.75rem; font-weight:800; padding:0.4rem 1rem; background:rgba(59,130,246,0.1); color:var(--primary-blue); border-radius:99px;">ENROLLED</span>
+                        </div>
+                        <h3 style="font-size: 1.5rem; font-weight: 800; color: #1E1B4B; margin-bottom:1rem;">${enr.course.title}</h3>
+                        <p style="color: #64748B; font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${enr.course.description}</p>
+                        
+                        <div class="progress-rail">
+                            <div class="progress-track" style="width: ${enr.progressPercentage}%"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem;">
+                            <span style="font-size:0.8rem; font-weight:800; color:var(--primary-blue);">${enr.progressPercentage}% COMPLETE</span>
+                            <button onclick="window.location.href='course-detail.html?id=${enr.course.id}'" style="background:none; border:none; color:var(--primary-blue); font-weight:800; font-size:0.85rem; cursor:pointer;">CONTINUE LEARNING &rarr;</button>
                         </div>
                     </div>
                 `;
@@ -106,16 +114,17 @@
             const courses = await apiFetch('/student/courses');
             const container = document.getElementById('availableCoursesView');
             if(courses.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem;"><p>No new curriculums found at the moment.</p></div>';
+                container.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding: 4rem; color: #94A3B8;">No new curriculums available right now.</p>';
                 return;
             }
             container.innerHTML = '';
             courses.forEach(c => {
                 container.innerHTML += `
                     <div class="course-card glass">
-                        <small style="text-transform: uppercase; font-weight: 700; color:var(--secondary); font-size: 0.75rem;">Curriculum Discovery</small>
-                        <h3 style="margin: 0.5rem 0 1.5rem; font-size: 1.25rem;">${c.title}</h3>
-                        <button onclick="enrollCourse(${c.id})" style="width:100%; padding:0.75rem; background:var(--primary); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer;">Enroll Now</button>
+                         <span style="font-size:0.75rem; font-weight:800; padding:0.4rem 1rem; background:#F8FAFC; color:#64748B; border-radius:99px;">CURRICULUM RECOMMENDATION</span>
+                        <h3 style="font-size: 1.5rem; font-weight: 800; color: #1E1B4B; margin-top:2rem; margin-bottom:1rem;">${c.title}</h3>
+                        <p style="color: #64748B; font-size: 0.95rem; margin-bottom:2.5rem;">${c.description.substring(0, 100)}...</p>
+                        <button onclick="enrollCourse(${c.id})" style="width:100%; padding:1rem; background:var(--primary-blue); color:white; border:none; border-radius:1rem; font-weight:800; font-size:1rem; cursor:pointer;">Discover Curriculum &rarr;</button>
                     </div>
                 `;
             });
@@ -125,7 +134,7 @@
     async function enrollCourse(courseId) {
         try {
             await apiFetch(`/student/courses/${courseId}/enroll`, { method: 'POST' });
-            alert("Enrollment successful! Welcome to the class.");
+            alert("Journey Initiated! Welcome to your new course.");
             window.location.reload();
         } catch (error) { alert(error.message); }
     }
