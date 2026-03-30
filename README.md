@@ -59,24 +59,19 @@ The frontend expects the API at **`http://localhost:8080`**. To change it, edit 
 
 ## Screenshots
 
-PNG previews are in **`screenshots/`** (numbered filenames). They include public pages, lesson/quiz/assignment views, each **role dashboard** (student, instructor, admin), and **courses** with the navbar for each logged-in role.
+PNG previews live in **`screenshots/`**. You can refresh them **manually**:
 
-Regenerate locally (backend on port **8080**, static site on **3456**):
-
-```bash
-npm install
-# Terminal 1: cd backend && mvn spring-boot:run
-# Terminal 2: cd frontend && npx serve -l 3456
-npm run screenshots
-```
+1. Start the **backend** (`cd backend`, then `mvn spring-boot:run`) so the API is on **http://localhost:8080**.
+2. Serve the **frontend** (for example `cd frontend` and `npx serve -l 3000`) and open **http://localhost:3000** in your browser.
+3. Visit each screen you care about (home, login, signup, courses, course detail, lesson, quiz, assignment, and each role dashboard after signing in with the demo accounts above).
+4. Use your OS or browser (**Snipping Tool**, **Win+Shift+S**, **Print Screen**, or DevTools device toolbar for a fixed width) and save PNGs into **`screenshots/`** with clear names (for example `01-home.png`, `09-dashboard-student.png`).
 
 ## Project layout
 
 ```
 backend/     Spring Boot application (Java)
 frontend/    HTML pages, css/style.css, js/main.js
-screenshots/ UI preview PNGs for the README / GitHub
-scripts/     capture-screenshots.mjs (Puppeteer)
+screenshots/ UI preview PNGs (optional; capture manually)
 ```
 
 ## Author
