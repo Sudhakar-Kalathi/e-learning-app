@@ -2,40 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up | Ease Everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create account | LearnSphere</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-main">
+<body>
 
-<nav class="navbar">
-    <a href="index.html" class="logo">Ease Everything</a>
-</nav>
+<div class="auth-container">
+    <div class="auth-hero">
+        <div class="auth-hero-content">
+            <h1>Join <br /><span style="color: #93C5FD;">LearnSphere</span></h1>
+            <p>Pick a role and start learning or teaching on the same platform.</p>
+        </div>
+    </div>
 
-<div class="auth-page">
-    <div class="auth-card glass">
-        <h2 style="margin-bottom: 0.5rem;">Create Your Account</h2>
-        <p style="color:var(--text-muted); margin-bottom: 2rem;">Start your professional learning pathway today.</p>
+    <div class="auth-form-side">
+        <a href="index.html" class="logo">LearnSphere</a>
+
+        <div class="auth-form-header">
+            <h2>Create account</h2>
+            <p>All fields are required.</p>
+        </div>
+
         <form id="signupForm">
-            <input type="text" id="signupName" placeholder="Full Name (e.g. Sudhakar Kalathi)" required>
-            <input type="email" id="signupEmail" placeholder="Email Address" required>
-            <select id="signupRole" required style="width: 100%; padding: 10.5px 1rem; margin-bottom: 1rem; border-radius: 0.75rem; border:1px solid #E2E8F0; background:white; font-size: 1rem;">
-                <option value="STUDENT">I want to Learn (Student)</option>
-                <option value="INSTRUCTOR">I want to Teach (Instructor)</option>
-                <option value="ADMIN">Platform Administrator</option>
-            </select>
-            <input type="password" id="signupPassword" placeholder="Create Password" required>
-            <button type="submit">Complete Registration</button>
+            <div class="form-group">
+                <label for="signupName">Full name</label>
+                <input type="text" id="signupName" class="form-input" placeholder="Your name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label for="signupEmail">Email</label>
+                <input type="email" id="signupEmail" class="form-input" placeholder="you@example.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="signupRole">Role</label>
+                <select id="signupRole" class="form-input" required>
+                    <option value="STUDENT">Student</option>
+                    <option value="INSTRUCTOR">Instructor</option>
+                    <option value="ADMIN">Administrator</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="signupPassword">Password</label>
+                <input type="password" id="signupPassword" class="form-input" placeholder="••••••••" required autocomplete="new-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">Create account</button>
         </form>
-        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
-            Already registered? <a href="login.html" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign In Here</a>
+
+        <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.9375rem; text-align: center;">
+            Already registered? <a href="login.html" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign in</a>
         </p>
     </div>
 </div>
 
-<footer class="footer">
-    <p>Ease Everything &copy; 2026</p>
-    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+<footer class="footer" style="position: fixed; bottom: 0; width: 45%; right: 0; background: white; border-top: none; padding: 1.5rem;">
+    <p>LearnSphere &copy; 2026 · Sudhakar Kalathi</p>
 </footer>
 
 <script src="js/main.js"></script>
@@ -49,10 +70,12 @@
             role: document.getElementById('signupRole').value
         };
         try {
-            await apiFetch('/auth/register', { method: 'POST', body: body });
-            alert('Signup successful! Please proceed to login.');
+            await apiFetch('/auth/register', { method: 'POST', body });
+            alert('Account created. You can sign in now.');
             window.location.href = 'login.html';
-        } catch (error) { alert(error.message || 'Signup failed'); }
+        } catch (error) {
+            alert(error.message || 'Registration failed.');
+        }
     });
 </script>
 </body>

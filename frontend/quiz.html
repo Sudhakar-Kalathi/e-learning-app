@@ -2,31 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz | Ease Everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz | LearnSphere</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .quiz-item {
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            background: white;
+            border: 1.5px solid var(--slate-100);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border: 1.5px solid var(--slate-100);
+            border-radius: var(--radius-md);
+            margin-top: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            color: var(--slate-700);
+        }
+        .option-label:hover { border-color: var(--primary); background: var(--slate-50); }
+        .option-radio { transform: scale(1.15); accent-color: var(--primary); }
+    </style>
 </head>
-<body>
+<body class="bg-main">
 
-<nav class="navbar">
-    <div class="logo">Ease Everything</div>
+<nav class="nav-top">
+    <div class="nav-inner">
+        <a href="index.html" class="logo" style="text-decoration: none; font-size: 1.5rem; color: var(--slate-900);">LearnSphere</a>
+        <div class="nav-links"></div>
+    </div>
 </nav>
 
-<section>
-    <div class="container">
-        <h2>Java Basics Quiz</h2>
+<main style="max-width: 800px; margin: auto; padding: 3rem 1.5rem 5rem;">
+    <header style="margin-bottom: 3rem; text-align: center;">
+        <span class="badge badge-indigo" style="margin-bottom: 1rem;">Assessment</span>
+        <h1 style="font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; color: var(--slate-900);">Module quiz</h1>
+        <p style="color: var(--text-muted); font-size: 1rem; margin-top: 0.75rem;">Sample multiple-choice UI — wire to your backend when you add quiz entities.</p>
+    </header>
 
-        <div class="quiz-card">
-            <p>1. Java is a ____ language.</p>
-            <label><input type="radio"> Object-Oriented</label>
-        </div>
-
-        <a href="assignment.html">
-            <button class="enroll-btn">Submit Quiz</button>
-        </a>
+    <div class="quiz-item">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--slate-900); margin-bottom: 1.5rem;">
+            Which practice most often improves API reliability in a Spring Boot service?
+        </h3>
+        <label class="option-label"><input type="radio" name="q1" class="option-radio"> <span>Input validation and consistent error responses</span></label>
+        <label class="option-label"><input type="radio" name="q1" class="option-radio"> <span>Disabling all logging in production</span></label>
+        <label class="option-label"><input type="radio" name="q1" class="option-radio"> <span>Using only GET endpoints</span></label>
+        <label class="option-label"><input type="radio" name="q1" class="option-radio"> <span>Storing passwords in JWT claims</span></label>
     </div>
-</section>
 
-<footer class="footer">© 2026 Ease Everything</footer>
+    <div style="display: flex; justify-content: center; padding-top: 2rem; border-top: 1.5px solid var(--slate-100);">
+        <button type="button" class="btn btn-primary" style="width: auto; padding: 1rem 3rem;" onclick="window.location.href='assignment.html'">Continue</button>
+    </div>
+</main>
+
+<footer class="footer">
+    <p>LearnSphere &copy; 2026 · Sudhakar Kalathi</p>
+</footer>
+
+<script src="js/main.js"></script>
 </body>
 </html>

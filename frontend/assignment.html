@@ -2,26 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Assignment | Ease Everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment | LearnSphere</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .assign-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        @media (min-width: 900px) {
+            .assign-layout { grid-template-columns: 1fr 300px; }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-main">
 
-<nav class="navbar">
-    <div class="logo">Ease Everything</div>
+<nav class="nav-top">
+    <div class="nav-inner">
+        <a href="index.html" class="logo" style="text-decoration: none; font-size: 1.5rem; color: var(--slate-900);">LearnSphere</a>
+        <div class="nav-links"></div>
+    </div>
 </nav>
 
-<section>
-    <div class="container">
-        <h2>Assignment</h2>
-        <p>Write a Java program to print numbers from 1 to 10.</p>
-        <p>Status: Not Submitted</p>
+<main style="max-width: 1000px; margin: auto; padding: 3rem 1.5rem 5rem;">
+    <header style="margin-bottom: 3rem;">
+        <span class="badge badge-emerald" style="margin-bottom: 1rem;">Assignment</span>
+        <h1 id="assignmentTitle" style="font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 800; color: var(--slate-900); margin-bottom: 1rem;">Loading…</h1>
+        <p id="assignmentDesc" style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.65; max-width: 720px;">—</p>
+    </header>
 
-        <button class="enroll-btn">Upload (UI Only)</button>
+    <div class="assign-layout">
+        <section>
+            <div class="card" style="padding: 2.5rem; border-radius: var(--radius-lg); border-style: dashed; text-align: center; background: white;">
+                <div style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.35;">📄</div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--slate-900); margin-bottom: 0.75rem;">Submission</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Demo UI — integrate with <code>/api/student/assignments/{id}/submit</code> when you add file uploads.</p>
+                <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-primary" style="width: auto; padding: 0.85rem 2rem;">Choose file</button>
+                    <button type="button" class="btn" style="width: auto; padding: 0.85rem 2rem; background: white; border: 1.5px solid var(--slate-200); color: var(--slate-900);">Submit</button>
+                </div>
+            </div>
+        </section>
+
+        <aside>
+            <div class="card" style="padding: 1.75rem; border-radius: var(--radius-lg); background: var(--slate-50);">
+                <h4 style="font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1.25rem;">Details</h4>
+                <div style="margin-bottom: 1.25rem;">
+                    <div style="font-size: 0.7rem; font-weight: 700; color: var(--slate-700); margin-bottom: 0.35rem;">STATUS</div>
+                    <span class="badge" style="background: #FEE2E2; color: #991B1B;">Not submitted</span>
+                </div>
+                <div>
+                    <div style="font-size: 0.7rem; font-weight: 700; color: var(--slate-700); margin-bottom: 0.35rem;">DUE</div>
+                    <div id="dueDate" style="font-size: 0.95rem; font-weight: 700; color: var(--slate-900);">—</div>
+                </div>
+            </div>
+        </aside>
     </div>
-</section>
+</main>
 
-<footer class="footer">© 2026 Ease Everything</footer>
+<footer class="footer">
+    <p>LearnSphere &copy; 2026 · Sudhakar Kalathi</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    function formatDue(d) {
+        if (d == null) return 'Flexible';
+        if (typeof d === 'string') return d;
+        if (Array.isArray(d) && d.length >= 3) {
+            return d[0] + '-' + String(d[1]).padStart(2, '0') + '-' + String(d[2]).padStart(2, '0');
+        }
+        return String(d);
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        const courseId = params.get('courseId');
+        if (!id || !courseId) {
+            document.getElementById('assignmentTitle').textContent = 'Assignment';
+            document.getElementById('assignmentDesc').textContent = 'Open this page from a course detail view to load assignment text from the API.';
+            return;
+        }
+        try {
+            const data = await catalogFetch('/catalog/courses/' + courseId);
+            const assignments = data.assignments || [];
+            const a = assignments.find(x => String(x.id) === String(id));
+            if (a) {
+                document.getElementById('assignmentTitle').textContent = a.title;
+                document.getElementById('assignmentDesc').textContent = a.description || '';
+                document.title = a.title + ' | LearnSphere';
+                document.getElementById('dueDate').textContent = formatDue(a.dueDate);
+            }
+        } catch (e) {
+            document.getElementById('assignmentDesc').textContent = 'Could not load assignment. Ensure the backend is running.';
+        }
+    });
+</script>
 </body>
 </html>

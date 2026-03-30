@@ -2,38 +2,163 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Java Basics | Ease Everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course | LearnSphere</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .module-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+        .module-item {
+            padding: 1.25rem 1.5rem;
+            background: var(--slate-50);
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--slate-100);
+            display: flex; align-items: center; justify-content: space-between;
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+        }
+        .module-item:hover {
+            background: white;
+            border-color: var(--primary);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+        .module-info { display: flex; align-items: center; gap: 1rem; }
+        .module-number {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--primary-light); color: var(--primary);
+            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8125rem;
+        }
+        .course-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        @media (min-width: 900px) {
+            .course-layout { grid-template-columns: 1fr 300px; }
+        }
+    </style>
 </head>
-<body>
+<body class="bg-main">
 
-<nav class="navbar">
-    <div class="logo">Ease Everything</div>
+<nav class="nav-top">
+    <div class="nav-inner">
+        <a href="index.html" class="logo" style="text-decoration: none; font-size: 1.5rem; color: var(--slate-900);">LearnSphere</a>
+        <div class="nav-links"></div>
+    </div>
 </nav>
 
-<header class="hero small-hero">
-    <h1>☕ Java Basics</h1>
-    <p>Self-paced Java course</p>
-</header>
+<main style="max-width: 1000px; margin: auto; padding: 4rem 5% 6rem;">
+    <header style="margin-bottom: 3rem;">
+        <div style="display:flex; align-items:center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
+            <span class="badge badge-indigo">Course</span>
+            <span id="courseCategory" class="badge" style="background: var(--slate-100); color: var(--slate-700);">—</span>
+        </div>
+        <h1 id="courseTitle" style="font-size: clamp(1.75rem, 4vw, 3rem); font-weight: 800; color: var(--slate-900); margin-bottom: 1rem;">Loading…</h1>
+        <p id="courseDesc" style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.65; max-width: 720px;">Loading description…</p>
+    </header>
 
-<section>
-    <div class="container">
-        <h2>Course Modules</h2>
+    <div class="course-layout">
+        <section>
+            <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--primary);">01</span> Lessons
+            </h2>
+            <div id="moduleList" class="module-list">
+                <p style="color: var(--text-muted);">Loading lessons…</p>
+            </div>
 
-        <ul class="learn-list">
-            <li>Introduction to Java</li>
-            <li>Variables & Data Types</li>
-            <li>Control Statements</li>
-            <li>OOP Concepts</li>
-        </ul>
+            <h2 style="font-size: 1.25rem; font-weight: 800; margin-top: 3rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="color: var(--primary);">02</span> Assignments
+            </h2>
+            <div id="assignmentList" class="module-list">
+                <p style="color: var(--text-muted);">Loading assignments…</p>
+            </div>
+        </section>
 
-        <a href="lesson.html">
-            <button class="enroll-btn">Start Lesson ▶</button>
-        </a>
+        <aside>
+            <div class="card" style="position: sticky; top: 96px; padding: 1.75rem; border-radius: var(--radius-lg); border: 1.5px solid var(--primary-light); background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);">
+                <h3 style="font-size: 1rem; margin-bottom: 1rem; font-weight: 800;">Progress</h3>
+                <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.25rem;">Enroll as a student and open this course from your dashboard to track completion.</p>
+                <button type="button" id="btnFirstLesson" class="btn btn-primary" style="padding: 0.9rem 1rem; width: 100%;" disabled>First lesson</button>
+                <a href="courses.html" class="btn" style="margin-top: 0.75rem; padding: 0.75rem; width: 100%; text-align: center; text-decoration: none; display: block; background: white; border: 1.5px solid var(--slate-200); color: var(--slate-900);">All courses</a>
+            </div>
+        </aside>
     </div>
-</section>
+</main>
 
-<footer class="footer">© 2026 Ease Everything</footer>
+<footer class="footer">
+    <p>LearnSphere &copy; 2026 · Sudhakar Kalathi</p>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const params = new URLSearchParams(window.location.search);
+        const courseId = params.get('id');
+        if (!courseId) {
+            window.location.href = 'courses.html';
+            return;
+        }
+
+        const moduleContainer = document.getElementById('moduleList');
+        const assignmentContainer = document.getElementById('assignmentList');
+        const btnFirst = document.getElementById('btnFirstLesson');
+
+        try {
+            const data = await catalogFetch(`/catalog/courses/${courseId}`);
+            const course = data.course;
+            const lessons = data.lessons || [];
+            const assignments = data.assignments || [];
+
+            document.getElementById('courseTitle').textContent = course.title;
+            document.getElementById('courseDesc').textContent = course.description || '';
+            document.title = course.title + ' | LearnSphere';
+
+            const t = (course.title || '').toLowerCase();
+            const catEl = document.getElementById('courseCategory');
+            if (t.includes('java')) { catEl.textContent = 'Programming'; }
+            else if (t.includes('frontend')) { catEl.textContent = 'Web'; }
+            else if (t.includes('spring')) { catEl.textContent = 'Backend'; }
+            else { catEl.textContent = 'General'; }
+
+            moduleContainer.innerHTML = '';
+            if (lessons.length === 0) {
+                moduleContainer.innerHTML = '<p style="color:var(--text-muted);">No lessons published yet.</p>';
+            } else {
+                lessons.forEach((l, i) => {
+                    moduleContainer.innerHTML += `
+                        <a href="lesson.html?courseId=${courseId}&lessonId=${l.id}" class="module-item">
+                            <div class="module-info">
+                                <div class="module-number">${i + 1}</div>
+                                <span style="font-weight: 700;">${l.title}</span>
+                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 800; color: var(--primary);">Open →</span>
+                        </a>`;
+                });
+                btnFirst.disabled = false;
+                btnFirst.onclick = () => {
+                    window.location.href = `lesson.html?courseId=${courseId}&lessonId=${lessons[0].id}`;
+                };
+                btnFirst.textContent = 'Start first lesson';
+            }
+
+            assignmentContainer.innerHTML = '';
+            if (assignments.length === 0) {
+                assignmentContainer.innerHTML = '<p style="color:var(--text-muted);">No assignments yet.</p>';
+            } else {
+                assignments.forEach((a, idx) => {
+                    assignmentContainer.innerHTML += `
+                        <a href="assignment.html?id=${a.id}&courseId=${courseId}" class="module-item" style="background:#FDF4FF;border-color:#FAE8FF;">
+                            <div class="module-info">
+                                <div class="module-number" style="background:#FAE8FF;color:#A855F7;">${idx + 1}</div>
+                                <span style="font-weight: 700;">${a.title}</span>
+                            </div>
+                            <span style="font-size: 0.75rem; font-weight: 800; color: #A855F7;">View →</span>
+                        </a>`;
+                });
+            }
+        } catch (e) {
+            document.getElementById('courseTitle').textContent = 'Course unavailable';
+            document.getElementById('courseDesc').textContent = 'Start the backend on port 8080 or check the course id.';
+            moduleContainer.innerHTML = '';
+            assignmentContainer.innerHTML = '';
+        }
+    });
+</script>
 </body>
 </html>

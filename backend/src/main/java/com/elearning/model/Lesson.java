@@ -1,5 +1,6 @@
 package com.elearning.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -36,6 +37,7 @@ public class Lesson {
     public String getContentUrl() { return contentUrl; }
     public void setContentUrl(String contentUrl) { this.contentUrl = contentUrl; }
     
+    @JsonIgnore
     public Course getCourse() { return course; }
     public void setCourse(Course course) { this.course = course; }
 }

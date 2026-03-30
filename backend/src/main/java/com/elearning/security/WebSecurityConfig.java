@@ -54,6 +54,7 @@ public class WebSecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeHttpRequests()
             .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/catalog/**").permitAll()
             .requestMatchers("/h2-console/**").permitAll()
             .anyRequest().authenticated();
 

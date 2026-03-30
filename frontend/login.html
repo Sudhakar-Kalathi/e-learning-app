@@ -2,34 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login | Ease Everything</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in | LearnSphere</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-main">
+<body>
 
-<nav class="navbar">
-    <a href="index.html" class="logo">Ease Everything</a>
-</nav>
+<div class="auth-container">
+    <div class="auth-hero">
+        <div class="auth-hero-content">
+            <h1>Welcome to <br /><span style="color: #93C5FD;">LearnSphere</span></h1>
+            <p>Sign in with your demo or registered account to open your dashboard.</p>
+        </div>
+    </div>
 
-<div class="auth-page">
-    <div class="auth-card glass">
-        <h2 style="margin-bottom: 0.5rem;">Welcome Back</h2>
-        <p style="color:var(--text-muted); margin-bottom: 2rem;">Log in to continue your learning journey.</p>
+    <div class="auth-form-side">
+        <a href="index.html" class="logo">LearnSphere</a>
+
+        <div class="auth-form-header">
+            <h2>Sign in</h2>
+            <p>Use your email and password to continue.</p>
+        </div>
+
         <form id="loginForm">
-            <input type="email" id="loginEmail" placeholder="Email (e.g. admin@example.com)" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <button type="submit">Sign In</button>
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
-        <p style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">
-            New to the platform? <a href="signup.html" style="color: var(--primary); font-weight: 700; text-decoration: none;">Create an Account</a>
+
+        <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.9375rem; text-align: center;">
+            New here? <a href="signup.html" style="color: var(--primary); font-weight: 700; text-decoration: none;">Create an account</a>
         </p>
     </div>
 </div>
 
-<footer class="footer">
-    <p>Ease Everything &copy; 2026</p>
-    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+<footer class="footer" style="position: fixed; bottom: 0; width: 45%; right: 0; background: white; border-top: none; padding: 1.5rem;">
+    <p>LearnSphere &copy; 2026 · Sudhakar Kalathi</p>
 </footer>
 
 <script src="js/main.js"></script>
@@ -46,10 +61,12 @@
             localStorage.setItem('jwtToken', response.token);
             localStorage.setItem('userRole', response.role);
             localStorage.setItem('userName', response.name);
-            if(response.role === 'ADMIN') window.location.href = 'admin-dashboard.html';
-            else if(response.role === 'INSTRUCTOR') window.location.href = 'instructor-dashboard.html';
+            if (response.role === 'ADMIN') window.location.href = 'admin-dashboard.html';
+            else if (response.role === 'INSTRUCTOR') window.location.href = 'instructor-dashboard.html';
             else window.location.href = 'student-dashboard.html';
-        } catch (error) { alert(error.message || 'Login failed'); }
+        } catch (error) {
+            alert(error.message || 'Sign in failed. Check the backend is running and credentials are correct.');
+        }
     });
 </script>
 </body>

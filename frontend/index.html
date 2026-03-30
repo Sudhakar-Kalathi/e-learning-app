@@ -2,52 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ease Everything | The Future of Learning</title>
+    <meta name="description" content="LearnSphere — modern e-learning for students, instructors, and administrators.">
+    <title>LearnSphere | E-Learning Platform</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="bg-main">
 
-<nav class="navbar">
-    <a href="index.html" class="logo">Ease Everything</a>
-    <div class="menu-toggle">☰</div>
-    <ul class="nav-links" id="mainNav">
-        <!-- Injected via JS -->
-    </ul>
+<nav class="nav-top">
+    <div class="nav-inner">
+        <a href="index.html" class="logo" style="text-decoration: none; font-size: 1.5rem; color: var(--slate-900);">LearnSphere</a>
+        <div class="nav-links"></div>
+    </div>
 </nav>
 
-<header class="hero">
-    <h1>Transform Your Future <br /><span style="color:var(--primary);">Learn Anything.</span></h1>
-    <p>Empowering 20,000+ students with industry-expert curriculums and personalized learning paths.</p>
-    <div>
-        <a href="signup.html"><button>Join the Journey 🚀</button></a>
-        <a href="courses.html" style="margin-left:1.5rem; text-decoration:none; font-weight:700; color:var(--text-main);">Browse Catalog</a>
+<header style="padding: 8rem 5% 10rem 5%; text-align: center; background: radial-gradient(circle at top, #EEF2FF 0%, #F8FAFC 100%);">
+    <div style="max-width: 900px; margin: auto;">
+        <span class="badge badge-indigo" style="margin-bottom: 2rem;">E-Learning Platform</span>
+        <h1 style="font-size: clamp(2.5rem, 6vw, 4.25rem); font-weight: 800; line-height: 1.1; margin-bottom: 2rem; color: var(--slate-900);">Unlock your <br /><span style="color: var(--primary);">full potential</span></h1>
+        <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 3rem; line-height: 1.6;">Courses, assignments, and role-based dashboards — built with Spring Boot and a polished web UI.</p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="signup.html" class="btn btn-primary" style="width: auto; padding: 1rem 2.5rem; font-size: 1rem;">Start learning</a>
+            <a href="courses.html" class="btn" style="width: auto; padding: 1rem 2.5rem; font-size: 1rem; background: white; border: 1.5px solid var(--slate-200); color: var(--slate-900); text-decoration: none;">Browse courses</a>
+        </div>
     </div>
 </header>
 
-<section class="container">
-    <h2 style="text-align:center; margin-bottom:0.5rem;">The Ease Everything Advantage</h2>
-    <p class="section-sub" style="text-align:center;">Why top performers choose our platform.</p>
+<section id="features" style="padding: 6rem 8%; background: white;">
+    <div style="text-align: center; margin-bottom: 4rem;">
+        <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 1rem;">One platform, three roles</h2>
+        <p style="color: var(--text-muted); font-size: 1.125rem; max-width: 640px; margin: auto;">Students enroll and track progress. Instructors publish courses. Admins oversee users and metrics.</p>
+    </div>
 
-    <div class="stats-grid" style="margin-top:3rem;">
-        <div class="stat-card glass shadow-sm">
-            <h3 style="color:var(--primary);">01. Personalized Tracking</h3>
-            <p style="margin-top:1rem; color:var(--text-muted); font-size:0.9rem;">Real-time progress visualization across all your curriculums.</p>
+    <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+        <div class="card" style="padding: 2.5rem; border-radius: var(--radius-lg); background: var(--slate-50);">
+             <h3 style="font-size: 1.35rem; margin-bottom: 1rem; color: var(--primary);">Students</h3>
+             <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.7;">Enrollments, lessons, quizzes, and assignment submissions in one place.</p>
+             <span class="badge badge-indigo">Learn</span>
         </div>
-        <div class="stat-card glass shadow-sm">
-            <h3 style="color:var(--primary);">02. Expert Instructors</h3>
-            <p style="margin-top:1rem; color:var(--text-muted); font-size:0.9rem;">Direct access to lessons curated by industry-leading professionals.</p>
+        <div class="card" style="padding: 2.5rem; border-radius: var(--radius-lg); background: #FDF4FF;">
+             <h3 style="font-size: 1.35rem; margin-bottom: 1rem; color: #8B5CF6;">Instructors</h3>
+             <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.7;">Create courses, add lessons and assignments, and manage your catalog.</p>
+             <span class="badge" style="background: #FAE8FF; color: #A855F7;">Teach</span>
         </div>
-        <div class="stat-card glass shadow-sm">
-            <h3 style="color:var(--primary);">03. Global Community</h3>
-            <p style="margin-top:1rem; color:var(--text-muted); font-size:0.9rem;">Join a worldwide network of learners and share your achievements.</p>
+        <div class="card" style="padding: 2.5rem; border-radius: var(--radius-lg); background: #ECFDF5;">
+             <h3 style="font-size: 1.35rem; margin-bottom: 1rem; color: #10B981;">Administrators</h3>
+             <p style="color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.7;">User directory, platform stats, and access control from a single dashboard.</p>
+             <span class="badge badge-emerald">Manage</span>
         </div>
     </div>
 </section>
 
 <footer class="footer">
-    <p>Ease Everything Learning Ecosystem &copy; 2026</p>
-    <p style="margin-top: 0.5rem; font-weight: 500;">Designed & Developed by <strong>Sudhakar Kalathi</strong></p>
+    <div style="max-width: 1200px; margin: auto; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+        <a href="index.html" class="logo" style="text-decoration: none; font-size: 1.5rem; color: var(--slate-900);">LearnSphere</a>
+        <p style="max-width: 520px; line-height: 1.6;">Demo accounts (after backend seed): <code style="background: var(--slate-100); padding: 0.2rem 0.5rem; border-radius: 6px;">student@learnsphere.demo</code> / <code style="background: var(--slate-100); padding: 0.2rem 0.5rem; border-radius: 6px;">Demo123!</code></p>
+        <div style="padding-top: 2rem; border-top: 1.5px solid var(--slate-100); width: 100%;">
+            <p>LearnSphere &copy; 2026 · <strong>Sudhakar Kalathi</strong></p>
+        </div>
+    </div>
 </footer>
 
 <script src="js/main.js"></script>

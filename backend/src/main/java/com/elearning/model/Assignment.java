@@ -1,5 +1,6 @@
 package com.elearning.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -44,6 +45,7 @@ public class Assignment {
     public LocalDate getDueDate() { return dueDate; }
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
     
+    @JsonIgnore
     public Course getCourse() { return course; }
     public void setCourse(Course course) { this.course = course; }
 }
